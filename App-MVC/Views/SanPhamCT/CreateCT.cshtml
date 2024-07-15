@@ -1,0 +1,79 @@
+﻿@model App_Data_ClassLib.Models.SanPhamChiTiet
+
+@{
+    ViewData["Title"] = "CreateCT";
+}
+
+<h1>CreateCT</h1>
+
+<h4>SanPhamChiTiet</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateCT" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IDSPCT" class="control-label"></label>
+                <input asp-for="IDSPCT" class="form-control" value="" readonly />
+                <span asp-validation-for="IDSPCT" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IDSP" class="control-label">ID Sản Phẩm</label>
+                <input asp-for="IDSP" class="form-control" readonly /> <!-- Đánh dấu là readonly -->
+                <span asp-validation-for="IDSP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IDHang" class="control-label"></label>
+                <select asp-for="IDHang" class="form-control">
+                    <option value="...">--Chọn Hãng--</option>
+                    <option value="931a6ec2-78b4-4961-b092-756a3cd7ed61">VN</option>
+                    <option value="11383b2a-99a3-4bb1-8029-9db83241dafa">Mẽo</option>
+                    <option value="bef5c7e8-83cf-477c-8174-ca625ef67564">Nhật pỏn</option>
+                </select>
+                <span asp-validation-for="IDHang" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TenSP" class="control-label"></label>
+                <input asp-for="TenSP" class="form-control" readonly/>
+                <span asp-validation-for="TenSP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImgURL" class="control-label"></label>
+                <input type="file" name="imgFile" />
+            </div>
+            <div class="form-group">
+                <label asp-for="GiaSP" class="control-label"></label>
+                <input asp-for="GiaSP" class="form-control" />
+                <span asp-validation-for="GiaSP" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Soluong" class="control-label"></label>
+                <input asp-for="Soluong" class="form-control" />
+                <span asp-validation-for="Soluong" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MauSac" class="control-label"></label>
+                <input asp-for="MauSac" class="form-control" />
+                <span asp-validation-for="MauSac" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="KichThuoc" class="control-label"></label>
+                <input asp-for="KichThuoc" class="form-control" />
+                <span asp-validation-for="KichThuoc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MoTa" class="control-label"></label>
+                <input asp-for="MoTa" class="form-control" />
+                <span asp-validation-for="MoTa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -1,0 +1,92 @@
+﻿@model IEnumerable<App_Data_ClassLib.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+    var mess = ViewData["account"];
+}
+
+<h1>Index</h1>
+<h4>@mess</h4>
+<form action="/User/Index" method="get">
+    <input type="text" id="searchInput" name="name" placeholder="Nhập chuỗi tìm kiếm...">
+    <input type="submit" value="Search">
+</form>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ten)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SoDienThoai)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DiaChi)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NamSinh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ten)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                <p>********</p>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SoDienThoai)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiaChi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NamSinh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role)
+            </td>
+            <td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.UserID }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.UserID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.UserID }, new {onclick = "return confirm('Bạn có chắc muốn xóa không.');"})
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+

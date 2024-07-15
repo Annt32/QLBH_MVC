@@ -1,0 +1,101 @@
+﻿@model IEnumerable<App_Data_ClassLib.Models.SanPham>
+
+@{
+    ViewData["Title"] = "SanPhamIndex";
+}
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+}
+<h1>Danh sách sản phẩm</h1>
+
+<p>
+    @if (role == "Admin")
+    {
+        <a asp-action="Create">Create New</a>
+    }
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            @if (role == "Admin")
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.IDSP)
+                </th>
+            }         
+            <th>
+                @Html.DisplayNameFor(model => model.TenSP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImgURL)
+            </th>     
+            @*<th>
+                @Html.DisplayNameFor(model => model.GiaSP)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.TongSL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrangThai)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            @if (role == "Admin")
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.IDSP)
+                </td>
+            }
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.TenSP)
+            </td>
+            <td>
+                    <img src="~/img/@item.ImgURL" height="100px">
+            </td>
+           
+            @*<td>
+                @Html.DisplayFor(modelItem => item.GiaSP)
+            </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.TongSL)
+            </td>
+            <td>
+                @if (item.TrangThai == 1)
+                {
+                    <text>Còn hàng</text>
+                }
+                @if (item.TrangThai == 0)
+                {
+                    <text><div class="text-danger">Hết hàng</div></text>
+                   
+                }
+            </td>
+            
+            <td>
+                    @if (role == "Admin")
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id=item.IDSP  })
+                        <text> | </text>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.IDSP }, new { onclick = "return confirm('Bạn có chắc muốn xóa không.');" });
+                        <text> | </text>
+
+                    }
+                    @Html.ActionLink("Details", "Details", "SanPhamViewModel", new { id=item.IDSP }) |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

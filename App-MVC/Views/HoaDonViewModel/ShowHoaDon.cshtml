@@ -1,0 +1,136 @@
+﻿@model App_Data_ClassLib.Models.HoaDonViewModel
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+    string displayUserId = @ViewBag.SessionUserID.Substring(0, 8) + "******";
+}
+<!-- Tiêu đề hoặc phần đầu của view -->
+<h2>Hóa Đơn</h2>
+
+<p>UserID ảo từ session: @displayUserId </p>
+
+<!-- Thông tin hóa đơn -->
+<p>Ngày mua: @Model.NgayMua</p>
+<p>Tổng tiền: @Model.TongTien</p>
+
+@*<p>Khuyến mãi đã áp dụng: @Model.KhuyenMaiMoTa</p>
+<p>Tiền giảm: @(Model.TongTienBanDau - Model.TongTien)</p>
+<p>Tổng tiền sau khi giảm: @Model.TongTien</p>*@
+
+<!-- Và các thông tin khác của hóa đơn -->
+<!-- Chi tiết hóa đơn -->
+<form asp-action="ThanhToan" method="post">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <!-- Các cột khác nếu cần -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var chiTiet in Model.ChiTietSanPhams)
+            {
+                <tr>
+                    <td>@chiTiet.TenSP</td>
+                    @*<td>
+                        @Model.TenSanPhamDict[chiTiet.IDSPCT]
+                    </td>*@
+                    <td>@chiTiet.GiaSP.ToString("N0")</td>
+                    <td>@chiTiet.SoLuong</td>
+                    <!-- Các thông tin khác của chi tiết sản phẩm -->
+                </tr>
+                
+            }
+@*
+            <select asp-for="IDKM" asp-items="ViewBag.KhuyenMaiSelectList" class="form-control">
+                @foreach (var khuyenMaiList in ViewBag.KhuyenMaiSelectList)
+                {
+                    if (DateTime.Now >= khuyenMaiList.NgayBatDau && DateTime.Now <= khuyenMaiList.NgayKetThuc)
+                    {
+                        <option value="@khuyenMaiList.Value">@khuyenMaiList.Text</option>
+                    }
+                }
+            </select>*@
+
+            <select asp-for="IDKM" class="form-control">
+                <option value="b4391a6a-b17f-48ab-9789-db1e59794f90">Chọn khuyến mãi...</option>
+                @foreach (var option in (SelectList)ViewBag.KhuyenMaiSelectList)
+                {
+                    <option value="@option.Value">@option.Text</option>
+                }
+
+            </select>
+
+
+            @*<select asp-for="IDKM" asp-items="ViewBag.KhuyenMaiSelectList" class="form-control">
+                <option value="b4391a6a-b17f-48ab-9789-db1e59794f90">Chọn khuyến mãi...</option>
+                <option value="4429ca45-b755-47dd-8ab4-cbe353636786">Giảm 50</option>
+            </select>*@
+        </tbody>
+       
+
+    </table>
+          <h2>Thanh toán bằng thẻ tín dụng</h2>
+            <div class="form-group">
+                <label for="cardNumber">Số thẻ:</label>
+                <input type="text" id="cardNumber" name="cardNumber" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="cardHolder">Chủ thẻ:</label>
+                <input type="text" id="cardHolder" name="cardHolder" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="expirationDate">Ngày hết hạn:</label>
+                <input type="month" id="expirationDate" name="expirationDate" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" name="cvv" class="form-control" required>
+            </div>
+        @if (isAuthenticated)
+        {
+            <h2>Thông tin cá nhân</h2>
+            <div>
+                <label for="ten">Tên:</label>
+            <input type="text" id="ten" name="ten" value="@Model.ten" class="form-control" required>
+            </div>      
+            <div>
+            <label for="Email">Email:</label>
+            <input type="Email" id="Email" name="Email" value="@Model.Email" class="form-control" required>
+            </div>
+            <div>
+                <label for="soDienThoai">Số điện thoại:</label>
+            <input type="tel" id="soDienThoai" name="soDienThoai" value="@Model.SoDienThoai" class="form-control" required>
+            </div>
+            <div>
+                <label for="diaChi">Địa chỉ:</label>
+            <input type="text" id="diaChi" name="diaChi" value="@Model.DiaChi" class="form-control" required>
+            </div>
+        } else    {
+                <h2>Thông tin cá nhân</h2>
+                <div>
+                <label for="TenKhachHang">Tên:</label>
+            <input type="text" id="TenKhachHang" name="ten" value="@Model.ten" class="form-control" required>
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="@Model.Email" class="form-control" required>
+                </div>
+                <div>
+                    <label for="soDienThoai">Số điện thoại:</label>
+            <input type="tel" id="soDienThoai" name="soDienThoai" value="@Model.SoDienThoai" class="form-control" required>
+                </div>
+                <div>
+                    <label for="diaChi">Địa chỉ:</label>
+            <input type="text" id="diaChi" name="diaChi" value="@Model.DiaChi" class="form-control" required>
+                </div>
+            
+            }
+    <input type="submit" value="Thanh Toán" class="btn btn-success" />
+</form>

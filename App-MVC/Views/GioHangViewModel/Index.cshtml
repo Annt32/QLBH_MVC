@@ -1,0 +1,122 @@
+﻿@model App_Data_ClassLib.Models.GioHangViewModel
+@{
+    string displayUserId = @ViewBag.SessionUserID.Substring(0, 8) + "******";
+}   
+
+   
+<p>UserID ảo từ session: @displayUserId </p>
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+}
+<form asp-action="ThanhToan" method="post">
+
+    <table class="table">
+        <thead>
+            <tr>
+                @if (role == "Admin")
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.GioHangChiTiets.FirstOrDefault().CartItemID)
+                    </th>
+                }
+               
+                <th>Tên Sản Phẩm</th>
+                @if (role == "Admin")
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.GioHangChiTiets.FirstOrDefault().CartID)
+                    </th>
+                }
+                
+               @* @if (role == "Admin")
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.GioHangChiTiets.FirstOrDefault().IDSP)
+                    </th>
+                }*@
+                
+                <th>
+                    @Html.DisplayNameFor(model => model.GioHangChiTiets.FirstOrDefault().SoLuong)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GioHangChiTiets.FirstOrDefault().TrangThai)
+                </th>
+                <th>CheckBox</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model?.GioHangChiTiets != null && Model.GioHangChiTiets.Any())
+            {
+                foreach (var chiTiet in Model.GioHangChiTiets)
+                {
+                    <tr>
+                        @if (role == "Admin")
+                        {
+                            <td>
+                                @Html.DisplayFor(_ => chiTiet.CartItemID)
+                            </td>
+                        }
+                      
+                        <td>
+                            @if (isAuthenticated)
+                            {
+                                @chiTiet.TenSanPham <!-- Ô cho tên sản phẩm -->
+                            } else
+                            {
+                                @Model.TenSanPhamDict[chiTiet.IDSPCT]
+
+                            }
+                        </td>
+                        @if (role == "Admin")
+                        {
+                            <td>
+                                @Html.DisplayFor(_ => chiTiet.CartID)
+                            </td>
+                        }
+                       
+                       @* @if (role == "Admin")
+                        {
+                            <td>
+                                @Html.DisplayFor(_ => chiTiet.IDSP)
+                            </td>
+                        }*@
+                        
+                        <td>
+                            @Html.DisplayFor(_ => chiTiet.SoLuong)
+                        </td>
+
+                        <td>
+                            @if (chiTiet.TrangThai == 1)
+                            {
+                                <text>Chờ thanh toán </text>
+                            }
+                            @if (chiTiet.TrangThai == 0)
+                            {
+                                <td class="text-danger">Đã thanh toán</td>
+                            }
+                        </td>
+                        <td>
+                            <input type="checkbox" name="selectedProductIds" value="@chiTiet.CartItemID" />
+                        </td>
+                        <td>
+                            @Html.ActionLink("Details", "SanPhamCTIndex","SanPhamViewModel", new { id=chiTiet.IDSPCT }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = chiTiet.CartItemID })
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">Không có sản phẩm nào trong giỏ hàng chi tiết.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <input type="submit" value="Thanh Toán" class="btn btn-success" />
+</form>
+

@@ -1,0 +1,85 @@
+﻿@model App_Data_ClassLib.Models.SanPhamViewModel
+@using System.Text.Json
+
+@{
+    var message = TempData["SanPhamError"] as string;
+    var encodedMessage = message != null ? JsonSerializer.Serialize(message) : "";
+}
+
+@if (TempData["SanPhamError"] != null)
+{
+    <script>
+        var message = @Html.Raw(encodedMessage);
+        alert(message);
+    </script>
+}
+@{
+    ViewData["Title"] = "Details";
+}
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SanPhamViewModel</h4>
+    <hr />
+    <dl class="row">
+    </dl>
+</div>
+<div>
+    <h2>Thông tin sản phẩm</h2>
+    <div>Tên sản phẩm: @Model.SanPham.TenSP</div>
+    <div>Ảnh: <img src="~/img/@Model.SanPham.ImgURL" height="100px"></div>
+    <div>Số lượng tồn: @Model.SanPham.TongSL</div>
+    @if (@Model.SanPham.TrangThai == 1)
+    {
+        <text>Còn hàng</text>
+    }
+    @if (@Model.SanPham.TrangThai == 0)
+    {
+        <text><div class="text-danger">Hết hàng</div></text>
+
+    }
+    <!-- Thêm các thông tin khác của sản phẩm ở đây -->
+
+    <h3>Chi tiết sản phẩm</h3>
+    @foreach (var chiTiet in Model.SanPhamChiTiets)
+    {
+        <div>Tên SP: @chiTiet.TenSP</div>
+        <div>
+            Ảnh:<img src="~/img/@chiTiet.ImgURL" height="100px">
+        </div>
+        <div>Giá: @chiTiet.GiaSP.ToString("N0")</div>
+        <div>Số lượng: @chiTiet.Soluong</div>
+        <div>Màu sắc: @chiTiet.MauSac</div>
+        <div>Kích thước: @chiTiet.KichThuoc</div>
+        <div>Mô tả: @chiTiet.MoTa</div>
+        <!-- Thêm các thông tin khác của chi tiết sản phẩm ở đây -->
+        @if (role == "Admin")
+        {
+            @Html.ActionLink("Edit", "EditCT", "SanPhamCT", new { id  = chiTiet.IDSPCT}, new { @class = "btn btn-primary" })
+            @Html.ActionLink("Delete", "Delete", "SanPhamCT", new { id = chiTiet.IDSPCT }, new { @class = "btn btn-danger", onclick = "return confirm('Bạn có chắc muốn xóa không.');" })
+
+        }
+        if (@chiTiet.Soluong != 0)
+        {
+            @Html.ActionLink("Thêm vào giỏ", "AddToCart", "SanPhamViewModel", new { id = chiTiet.IDSPCT }, new { @class = "btn btn-primary" })
+        } else
+        {
+            <button class="btn btn-primary" disabled="disabled">Hết hàng</button>
+        }
+
+        <hr />
+
+    }
+</div>
+@if (role == "Admin")
+{
+    @Html.ActionLink("Create CT", "CreateCT", "SanPhamCT", new { id = @Model.SanPham.IDSP }, new { @class = "btn btn-primary" })
+}
+

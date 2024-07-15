@@ -1,0 +1,116 @@
+﻿@model App_Data_ClassLib.Models.User
+
+@{
+    ViewData["Title"] = "Create";
+}
+@using System.Security.Claims
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+}
+
+<div class="container shadow border rounded-4 " style="max-width: 50%; max-height: 1200px;">
+    <div class="row">
+        <div class="col-md-9 container">                   
+            
+            @if (role == "Admin")
+            {
+                <h1 class="container text-center">Tạo Tài Khoản (Admin)</h1>
+            }
+            else if (role == "User")
+            {
+                
+            }
+            else
+            {
+                <h1 class="container text-center">Đăng Ký</h1>
+            }
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @*<div class="form-group">
+                <label asp-for="UserID" class="control-label"></label>
+                <input asp-for="UserID" class="form-control" />
+                <span asp-validation-for="UserID" class="text-danger"></span>
+                </div>*@
+                <div class="form-group">
+                    <label asp-for="Ten" class="control-label"></label>
+                    <input asp-for="Ten" class="form-control" />
+                    <span asp-validation-for="Ten" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Username" class="control-label"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SoDienThoai" class="control-label"></label>
+                    <input asp-for="SoDienThoai" class="form-control" />
+                    <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiaChi" class="control-label"></label>
+                    <input asp-for="DiaChi" class="form-control" />
+                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NamSinh" class="control-label"></label>
+                    <input asp-for="NamSinh" class="form-control" />
+                    <span asp-validation-for="NamSinh" class="text-danger"></span>
+                </div>
+                
+                @if (role == "Admin")
+                {
+                    <div class="form-group">
+                        <label asp-for="Role" class="control-label"></label>
+                        <select asp-for="Role" class="form-control">
+                            <option value="...">--Phân Quyền--</option>
+                            <option value="Admin">Admin</option>
+                            <option value="User">User</option>
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
+                    </div>
+                }
+                else if (role == "User")
+                {
+                    <div class="form-group">
+                        <label asp-for="Role" class="control-label"></label>
+                        <input type="hidden" asp-for="Role" value="User" />
+                    </div>
+                    // Người dùng có vai trò User
+                } else
+                {
+                    <div class="form-group">
+                        <label asp-for="Role" class="control-label"></label>
+                        <input type="hidden" asp-for="Role" value="User" />
+                    </div>
+                }
+                <div class="form-group" style="margin-top: 10px; margin-bottom: 50px;">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Login" class="btn btn-success bg-success border-0">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div>
+   
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

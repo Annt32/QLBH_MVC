@@ -1,0 +1,82 @@
+﻿@model App_Data_ClassLib.Models.SanPham
+
+@{
+    ViewData["Title"] = "Details";
+}
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SanPham</h4>
+    <hr />
+    <dl class="row">
+        
+        @if (role == "Admin")
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.IDSP)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.IDSP)
+            </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TenSP)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TenSP)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ImgURL)
+        </dt>
+        <dd class="col-sm-10">
+            <img src="~/img/@Model.ImgURL" height="100px">
+        </dd>
+        @if (role == "Admin")
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.TongSL)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TongSL)
+            </dd>
+        }          
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TrangThai)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.TrangThai == 1)
+            {
+                <text>Còn hàng</text>
+            }
+            else
+            {
+                <text><div class="text-danger">Hết hàng</div></text>
+            }
+
+        </dd>
+       
+    </dl>
+</div>
+<div>
+    @if (role == "Admin")
+    {
+        @Html.ActionLink("Edit", "CreateCT", "SanPhamCT", new { id = Model.IDSP }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("SPCT", "Details", "SanPhamViewModel", new { id = Model.IDSP }, new { @class = "btn btn-primary" })
+    }
+    else if (role == "User")
+    {
+        @Html.ActionLink("SPCT", "Details", "SanPhamViewModel", new { id = Model.IDSP }, new { @class = "btn btn-primary" })
+    }
+    else
+    {
+        @Html.ActionLink("SPCT", "Details", "SanPhamViewModel", new { id = Model.IDSP }, new { @class = "btn btn-primary" })
+    }
+
+</div>

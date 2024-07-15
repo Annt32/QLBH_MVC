@@ -1,0 +1,52 @@
+﻿@using System.Security.Claims
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+}
+
+@if (role == "Admin")
+{
+    <h2>Chi Tiết Hóa Đơn: @Model.HoaDon.IDHD</h2>
+}
+else
+{
+    string displayId =  @Model.HoaDon.IDHD.ToString().Substring(0, 8) + "****";
+    <td>Chi Tiết Hóa Đơn: @displayId</td>
+}
+
+<!-- Thông tin khác của hóa đơn ở đây... -->
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID Sản Phẩm Chi Tiết</th>
+            <th>Giá</th>
+            <th>Số Lượng</th>
+            <th>Khuyến Mãi</th>
+            <!-- Các cột thông tin khác... -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.HoaDonChiTiets)
+        {
+            <tr>
+                @if (role == "Admin")
+                {
+                    <td>@item.IDSPCT</td>
+                }
+                else
+                {
+                    string displayId = item.IDSPCT.ToString().Substring(0, 8) + "****";
+                    <td>@displayId</td>
+                }
+                
+                <td>@item.GiaSP</td>
+                <td>@item.SoLuong</td>
+                <td>@item.KhuyenMai?.MoTa</td>
+                <!-- Các thông tin khác... -->
+            </tr>
+        }
+    </tbody>
+</table>

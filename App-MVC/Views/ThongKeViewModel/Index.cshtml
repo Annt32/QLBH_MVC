@@ -1,0 +1,57 @@
+﻿@model App_Data_ClassLib.Models.ThongKeViewModel
+
+<h2>Thống Kê Hóa Đơn</h2>
+@using System.Security.Claims
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID Hóa Đơn</th>
+            <th>Ngày Mua</th>
+            <th>Tổng Tiền</th>
+            <th>Hình Thức Thanh Toán</th>
+            @if (role == "Admin")
+            {
+                <th>UserID</th>
+            }
+           <th>Tương tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hoaDon in Model.HoaDons)
+        {
+            <tr>
+                @if (role == "Admin")
+                {
+                    <td>@hoaDon.IDHD</td>
+                }
+                else
+                {
+                    string displayId = hoaDon.IDHD.ToString().Substring(0, 8) + "****";
+                    <td>@displayId</td>
+                }
+
+                <td>@hoaDon.NgayMua.ToString("dd/MM/yyyy")</td>
+                <td>@hoaDon.TongTien.ToString("N0")</td>
+                <td>@hoaDon.HinhThucThanhToan</td>
+                @if (role == "Admin")
+                {
+                    <td>
+                        @hoaDon.UserID
+                    </td>
+                }
+                <td>
+                    <a asp-action="ChiTietHoaDon" asp-route-idHD="@hoaDon.IDHD">Xem Chi Tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

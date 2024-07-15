@@ -1,0 +1,121 @@
+﻿@model IEnumerable<App_Data_ClassLib.Models.SanPham>;
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Home Page";
+    var loginData = TempData["Login"];
+}
+@using System.Security.Claims
+
+@{
+    var message = TempData["SanPhamError"] as string;
+    var encodedMessage = message != null ? JsonSerializer.Serialize(message) : "";
+}
+
+@if (TempData["SanPhamError"] != null)
+{
+    <script>
+        var message = @Html.Raw(encodedMessage);
+        alert(message);
+    </script>
+}
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+}
+<div class="text-center">
+    @if (isAuthenticated)
+    {
+        if (role == "Admin")
+        {
+            <h1 class="display-4">Chào mừng Admin, @User.Identity.Name!</h1>
+            string displayUserId = @ViewBag.SessionUserID.Substring(0, 8) + "******";
+            <p>UserID ảo từ session: @displayUserId </p>
+
+        }
+        else if (role == "User")
+        {
+            <h1 class="display-4">Chào mừng Người dùng, @User.Identity.Name!</h1>
+            string displayUserId = @ViewBag.SessionUserID.Substring(0, 8) + "******";
+            <p>UserID ảo từ session: @displayUserId </p>
+
+            // Người dùng có vai trò User
+        }
+        else
+        {
+            <h1 class="display-4">Tài khoản khách vào làm gì. Biến ngay, vả vỡ Alo bây giờ, @User.Identity.Name!</h1>
+            // Người dùng có vai trò không xác định hoặc là Guest
+        }
+    }
+    else
+    {
+        <h1 class="display-4">Đăng nhập đê</h1>
+        string displayUserId = @ViewBag.SessionUserID.Substring(0, 8) + "******";
+        <p>UserID ảo từ session: @displayUserId </p>
+
+    }
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+</div>
+
+
+
+@if (TempData["LoginSuccess"] != null)
+{
+    <script>
+        alert("@Html.Raw(TempData["LoginSuccess"])");
+    </script>
+}
+
+<body ng-app="myApp">
+  
+        @if (role == "Khách")
+        {
+
+
+        }
+        else
+        {
+            <div class="container shadow border rounded-2 " style="max-width: 80%;">
+                <div class="container">
+                    <h3>Sản Phẩm Mới nhất</h3>
+                    <div class="row">
+                        @foreach (var item in Model)
+                        {
+                            <!-- Box sản phẩm-->
+                            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                                <div class="border rounded overflow-hidden shadow">
+                                    <!-- Hiển thị ảnh -->
+                                    <div class="ratio ratio-16x9">
+                                        <img src="@Url.Content("~/img/" + item.ImgURL)" alt="@item.TenSP" class="mw-100 mh-100">
+                                    </div>
+                                    <!-- Hiển thị text và button -->
+                                    <div class="p-2">
+                                        <h5>@item.TenSP</h5>
+                                        <div class="d-flex justify-content-between">
+                                            @*                                    <span class="fw-bold">@item.GiaSP</span>
+                                *@
+                                        </div>
+                                        @*<button class="btn btn-danger rounded-pill w-100 btn-sm">Mua Ngay</button>
+                            @using (Html.BeginForm("AddToCart", "Home", new { id = item.IDSP }, FormMethod.Post))
+                            {
+                            <input type="submit" value="Thêm vào giỏ hàng" />
+                            }*@
+
+
+                                        <button class="btn btn-warning rounded-pill w-100 btn-sm mt-2">
+                                            @Html.ActionLink("Xem thêm", "Details","SanPham", new { id=item.IDSP })
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    
+</body>
