@@ -1,7 +1,7 @@
 Trong SD18302_NET104Context. Hãy thay đổi Server= Server-Name. <br>
 Update-Database <br>
 Chạy App-MVC. <br>
-Admin: Tk admin admin123
+Admin: admin admin123
 
 Tính năng Web: <br>
 Trang sản phẩm cho phép thêm sản phẩm vào giỏ hàng. <br>
