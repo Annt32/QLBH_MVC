@@ -5,6 +5,13 @@
     var mess = ViewData["account"];
 }
 
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var isAuthenticated = HttpContextAccessor.HttpContext.Session.GetString("user") != null;
+    var role = HttpContextAccessor.HttpContext.Session.GetString("role");
+}
+
 <h1>Index</h1>
 <h4>@mess</h4>
 <form action="/User/Index" method="get">
@@ -80,7 +87,19 @@
                 @Html.DisplayFor(modelItem => item.Role)
             </td>
             <td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.UserID }) |
+                    @if (role == "Admin")
+                    {
+                        
+                    }
+                    else if (role == "User")
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id=item.UserID });
+                    }
+                    else
+                    {
+                        
+                    }
+                    
                     @Html.ActionLink("Details", "Details", new { id=item.UserID }) |
                     @Html.ActionLink("Delete", "Delete", new { id=item.UserID }, new {onclick = "return confirm('Bạn có chắc muốn xóa không.');"})
             </td>

@@ -59,7 +59,7 @@ app.UseSession(); // Đặt này trước UseRouting và UseEndpoints
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Create}");
+    pattern: "{controller=User}/{action=Login}");
 
 app.Run();
 

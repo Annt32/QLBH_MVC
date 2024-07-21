@@ -26,8 +26,31 @@ namespace App_MVC.Controllers
             // Khởi tạo repository với 2 tham số là Dbset và DBContext
             _users = _context.Users;
             _repo = new AllRepository<User>( _users,_context);
+
+            CheckAndAddAdminAccount();
         }
         // Lấy ra tất cả danh sách User
+        private void CheckAndAddAdminAccount()
+        {
+            var adminUser = _repo.GetAll().FirstOrDefault(u => u.Role == "Admin");
+            if (adminUser == null)
+            {
+                var admin = new User
+                {
+                    UserID = Guid.NewGuid(),
+                    Ten = "Admin",
+                    Email = "admin@example.com",
+                    Username = "admin",
+                    Password = "admin123", // Lưu ý: Bạn nên mã hóa mật khẩu
+                    SoDienThoai = "0123456789",
+                    DiaChi = "Admin Address",
+                    NamSinh = DateTime.Now.AddYears(-30), // Giả định tuổi admin là 30
+                    Role = "Admin"
+                };
+                _context.Add(admin);
+                _context.SaveChanges();
+            }
+        }
 
         public IActionResult Index(string name) // tham số name để tìm kiếm
         {
