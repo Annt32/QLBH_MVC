@@ -30,7 +30,7 @@ namespace App_Data_ClassLib.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=DESKTOP-PMB8531\\SQLEXPRESS;Database=SD18302_NET104;Trusted_Connection=True;TrustServerCertificate=True");
+                optionsBuilder.UseSqlServer("Server= Server-name;Database=SD18302_NET104;Trusted_Connection=True;TrustServerCertificate=True");
             }
         }
 
