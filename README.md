@@ -1,4 +1,4 @@
-Trong SD18302_NET104Context. Hãy thay đổi Server=DESKTOP-PMB8531\\SQLEXPRESS. <br>
+Trong SD18302_NET104Context. Hãy thay đổi Server= Server-Name. <br>
 Update-Database <br>
 Chạy App-MVC. <br>
 Admin: Tk admin admin123
